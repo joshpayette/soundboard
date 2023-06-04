@@ -25,15 +25,10 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-// TODO - remove this, it's just an example of how to use IPC
-// ipcMain.on('ipc-example', async (event, arg) => {
-//   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-//   console.log(msgTemplate(arg));
-//   event.reply('ipc-example', msgTemplate('pong'));
-// });
-
-ipcMain.on('set-audio-output-device', async () => {
-  // TODO Add logic for setting the output device
+ipcMain.on('ipc-example', async (event, arg) => {
+  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+  console.log(msgTemplate(arg));
+  event.reply('ipc-example', msgTemplate('pong'));
 });
 
 if (process.env.NODE_ENV === 'production') {

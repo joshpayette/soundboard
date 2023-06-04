@@ -1,26 +1,8 @@
-import { useEffect, useState } from 'react';
-import Logger from 'features/Logger';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.css';
-import 'tailwindcss/tailwind.css';
 
 function Hello() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [outputDevices, setOutputDevices] = useState<MediaDeviceInfo[]>([]);
-
-  useEffect(() => {
-    async function getOutputDevices() {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const onlyAudioDevices = devices.filter(
-        (device) => device.kind === 'audiooutput'
-      );
-      Logger.info(`Found ${onlyAudioDevices.length} audio output devices`);
-      setOutputDevices(onlyAudioDevices);
-    }
-    getOutputDevices();
-  }, []);
-
   return (
     <div>
       <div className="Hello">
