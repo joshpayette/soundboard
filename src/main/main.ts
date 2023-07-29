@@ -12,8 +12,28 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import Store from 'electron-store';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+
+// TODO - remove this, it's just an example of how to use IPC
+// ipcMain.on('ipc-example', async (event, arg) => {
+//   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+//   console.log(msgTemplate(arg));
+//   event.reply('ipc-example', msgTemplate('pong'));
+// });
+
+const store = new Store();
+ipcMain.on('electron-store-get', async (event, val) => {
+  event.returnValue = store.get(JSON.parse(val));
+});
+ipcMain.on('electron-store-set', async (_event, key, val) => {
+  store.set(key, JSON.stringify(val));
+});
+
+ipcMain.on('set-audio-output-device', async () => {
+  // TODO Add logic for setting the output device
+});
 
 class AppUpdater {
   constructor() {
@@ -24,12 +44,6 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

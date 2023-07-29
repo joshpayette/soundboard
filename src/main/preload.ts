@@ -4,7 +4,23 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels = 'ipc-example';
 
+export interface Store {
+  audioOutputDevice: string;
+  soundFolders: string[];
+  activeFolders: string[];
+}
+
+export type StoreKeys = keyof Store;
+
 const electronHandler = {
+  store: {
+    get(key: StoreKeys) {
+      return ipcRenderer.sendSync('electron-store-get', key);
+    },
+    set(key: StoreKeys, value: string) {
+      ipcRenderer.send('electron-store-set', key, value);
+    },
+  },
   ipcRenderer: {
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
