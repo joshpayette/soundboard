@@ -2,10 +2,15 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example';
+export type Channels =
+  | 'ipc-example'
+  | 'electron-store-get'
+  | 'electron-store-set'
+  | 'get-selected-device-id'
+  | 'set-selected-device-id';
 
 export interface Store {
-  audioOutputDevice: string;
+  selectedDeviceId: string;
   soundFolders: string[];
   activeFolders: string[];
 }

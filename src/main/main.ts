@@ -24,16 +24,18 @@ import { resolveHtmlPath } from './util';
 // });
 
 const store = new Store();
-ipcMain.on('electron-store-get', async (event, val) => {
-  event.returnValue = store.get(JSON.parse(val));
+ipcMain.on('electron-store-get', async (event, key) => {
+  event.returnValue = store.get(key);
 });
 ipcMain.on('electron-store-set', async (_event, key, val) => {
-  store.set(key, JSON.stringify(val));
+  store.set(key, val);
 });
-
-ipcMain.on('set-audio-output-device', async () => {
-  // TODO Add logic for setting the output device
-});
+// ipcMain.on('get-selected-device-id', async (event) => {
+//   event.returnValue = store.get('selectedDeviceId');
+// });
+// ipcMain.on('set-selected-device-id', async (_event, val) => {
+//   store.set('selectedDeviceId', val);
+// });
 
 class AppUpdater {
   constructor() {
