@@ -2,12 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels =
-  | 'ipc-example'
-  | 'electron-store-get'
-  | 'electron-store-set'
-  | 'get-selected-device-id'
-  | 'set-selected-device-id';
+export type Channels = 'electron-store-get' | 'electron-store-set';
 
 export interface Store {
   selectedDeviceId: string;

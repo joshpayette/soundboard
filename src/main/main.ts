@@ -16,13 +16,6 @@ import Store from 'electron-store';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-// TODO - remove this, it's just an example of how to use IPC
-// ipcMain.on('ipc-example', async (event, arg) => {
-//   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-//   console.log(msgTemplate(arg));
-//   event.reply('ipc-example', msgTemplate('pong'));
-// });
-
 const store = new Store();
 ipcMain.on('electron-store-get', async (event, key) => {
   event.returnValue = store.get(key);
@@ -30,12 +23,6 @@ ipcMain.on('electron-store-get', async (event, key) => {
 ipcMain.on('electron-store-set', async (_event, key, val) => {
   store.set(key, val);
 });
-// ipcMain.on('get-selected-device-id', async (event) => {
-//   event.returnValue = store.get('selectedDeviceId');
-// });
-// ipcMain.on('set-selected-device-id', async (_event, val) => {
-//   store.set('selectedDeviceId', val);
-// });
 
 class AppUpdater {
   constructor() {
