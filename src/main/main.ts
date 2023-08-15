@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import Store from 'electron-store';
@@ -22,6 +22,15 @@ ipcMain.on('electron-store-get', async (event, key) => {
 });
 ipcMain.on('electron-store-set', async (_event, key, val) => {
   store.set(key, val);
+});
+
+ipcMain.on('select-sound-folder', async (event) => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openDirectory', 'multiSelections'],
+  });
+  if (!result.canceled) {
+    event.returnValue = result.filePaths;
+  }
 });
 
 class AppUpdater {
