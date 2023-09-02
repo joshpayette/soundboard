@@ -28,8 +28,9 @@ ipcMain.on('select-sound-folder', async (event) => {
   const result = await dialog.showOpenDialog({
     properties: ['openDirectory', 'multiSelections'],
   });
+
   if (!result.canceled) {
-    event.returnValue = result.filePaths;
+    event.reply('select-sound-folder', result.filePaths);
   }
 });
 

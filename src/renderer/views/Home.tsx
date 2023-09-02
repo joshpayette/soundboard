@@ -1,11 +1,11 @@
 import { SelectAudioOutput } from '@/components/SelectAudioOutput';
-import { SelectSoundFolder } from '@/components/SelectSoundFolder';
+import { SelectSoundFolders } from '@/components/SelectSoundFolders';
 
 export default function HomeView() {
   return (
     <div>
       <SelectAudioOutput />
-      <SelectSoundFolder />
+      <SelectSoundFolders />
     </div>
   );
 }
