@@ -24,7 +24,7 @@ export const useListAudioDevices = (): [audioDevices: MediaDeviceInfo[]] => {
  * A select input for choosing an audio output device from a list of available
  * devices on the system.
  */
-export function AudioOutputSelect() {
+export function SelectAudioOutput() {
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>(() =>
     window.electron.store.get('selectedDeviceId')
   );
