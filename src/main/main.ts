@@ -13,6 +13,7 @@ import { app, BrowserWindow, dialog, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import Store from 'electron-store';
+import { z } from 'zod';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -30,9 +31,31 @@ ipcMain.on('select-sound-folder', async (event) => {
   });
 
   if (!result.canceled) {
+    // Add to store if not already in store
+    const soundFolders = z
+      .string()
+      .optional()
+      .array()
+      .safeParse(store.get('soundFolders'));
+    if (soundFolders.success && soundFolders.data) {
+      const newSoundFolders = soundFolders.data;
+      result.filePaths.forEach((folder) => {
+        if (!newSoundFolders.includes(folder)) {
+          newSoundFolders.push(folder);
+        }
+      });
+      store.set('soundFolders', newSoundFolders);
+    }
     event.reply('select-sound-folder', result.filePaths);
   }
 });
+
+// ipcMain.on('get-sound-files', (event) => {
+//   const soundFolders = store.get('soundFolders');
+//   const soundFiles: string[] = [];
+
+//   event.reply('get-sound-files', soundFiles);
+// });
 
 class AppUpdater {
   constructor() {

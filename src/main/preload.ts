@@ -20,6 +20,7 @@ const store = {
 export type RendererKeys =
   | 'electron-store-get'
   | 'electron-store-set'
+  | 'get-sound-files'
   | 'select-sound-folder';
 const renderer = {
   sendMessage(channel: RendererKeys, ...args: unknown[]) {

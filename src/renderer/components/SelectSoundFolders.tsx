@@ -12,6 +12,9 @@ export default function SelectSoundFolders() {
   useEffect(() => {
     if (!window) return;
 
+    const folders = window.electron.store.get('soundFolders');
+    console.info('folders', folders);
+
     window.electron.ipcRenderer.once('select-sound-folder', (filePaths) => {
       if (!filePaths) {
         console.error('No filePaths returned.');
