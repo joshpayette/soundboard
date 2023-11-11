@@ -17,7 +17,12 @@ import { z } from 'zod';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-const store = new Store();
+const store = new Store({
+  defaults: {
+    soundFolders: [],
+  },
+});
+
 ipcMain.on('electron-store-get', async (event, key) => {
   event.returnValue = store.get(key);
 });
@@ -25,26 +30,27 @@ ipcMain.on('electron-store-set', async (_event, key, val) => {
   store.set(key, val);
 });
 
+// When the user selects a folder, add it to the list of folders
 ipcMain.on('select-sound-folder', async (event) => {
   const result = await dialog.showOpenDialog({
     properties: ['openDirectory', 'multiSelections'],
   });
 
   if (!result.canceled) {
-    // Add to store if not already in store
-    const soundFolders = z
-      .string()
-      .optional()
-      .array()
-      .safeParse(store.get('soundFolders'));
-    if (soundFolders.success && soundFolders.data) {
-      const newSoundFolders = soundFolders.data;
+    const unsafeStoreFolders = store.get('soundFolders');
+    const folderValidator = z.string().array().safeParse(unsafeStoreFolders);
+
+    if (folderValidator.success && folderValidator.data) {
+      // Add existing folders to the list
+      const newFolderList = folderValidator.data;
+      // Add new folders to the list if they don't already exist
       result.filePaths.forEach((folder) => {
-        if (!newSoundFolders.includes(folder)) {
-          newSoundFolders.push(folder);
+        if (!newFolderList.includes(folder)) {
+          newFolderList.push(folder);
         }
       });
-      store.set('soundFolders', newSoundFolders);
+      // Save the new list
+      store.set('soundFolders', newFolderList);
     }
     event.reply('select-sound-folder', result.filePaths);
   }
